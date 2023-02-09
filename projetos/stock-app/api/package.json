@@ -4,9 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "npm run dev",
-    "start-dev": "nodemon", 
-    "build": "npx tsc" 
+    "dev": "nodemon",    
+    "build": "tsc" 
   },
   "author": "",
   "license": "ISC",
