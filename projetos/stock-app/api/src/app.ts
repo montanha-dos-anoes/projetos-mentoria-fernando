@@ -1,4 +1,6 @@
 import express from 'express';
+import mongoose from 'mongoose';
+import config from './config';
 import { router } from './routes/router';
 
 export class App {
@@ -8,9 +10,10 @@ export class App {
     this.server = express();
   }
 
-  public create() {
+  public async create() {
     this.configureMiddlewares();
     this.configureRoutes();
+    await this.connectToDatabase();
     return this.server;
   }
 
@@ -22,8 +25,14 @@ export class App {
     this.server.use(router);
   }
 
+  private async connectToDatabase() {
+    return mongoose.connect(config.DB_URI).then(() => {
+      console.log('[app] > database conected');
+    });
+  }
+
   public start() {
-    const PORT = 3000;
+    const PORT = config.PORT;
     this.server.listen(PORT, () => {
       console.log(`[app] > listen on port ${PORT}`);
     });
