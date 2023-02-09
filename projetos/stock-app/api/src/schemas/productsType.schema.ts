@@ -1,6 +1,6 @@
 import { model, Schema } from 'mongoose';
 
-const schemaCampo = new Schema(
+const schemaField = new Schema(
   {
     type: String,
     isRequired: Boolean,
@@ -14,7 +14,7 @@ const schemaCampo = new Schema(
 const schema = new Schema(
   {
     description: String,
-    fields: [schemaCampo],    
+    fields: [schemaField],    
     isActive: {
       type: Boolean,
       default: true,
