@@ -1,5 +1,6 @@
 import { model, Schema } from 'mongoose';
 
+
 const schemaField = new Schema(
   {
     type: String,
@@ -11,10 +12,10 @@ const schemaField = new Schema(
 );
 
 
-const schema = new Schema(
+const schemaProductType = new Schema(
   {
-    description: String,
-    fields: [schemaField],    
+    description: String,   
+    fields: [schemaField],
     isActive: {
       type: Boolean,
       default: true,
@@ -25,4 +26,4 @@ const schema = new Schema(
   },
 );
 
-export default model('ProductType', schema, 'product-types');
+export default model('ProductType', schemaProductType, 'product-types');
