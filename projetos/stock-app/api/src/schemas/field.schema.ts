@@ -8,7 +8,7 @@ const schemaField = new Schema(
       type: String,
       enum: EnumFieldType
     },
-    // fieldValue: { type: Schema.Types.ObjectId, ref: 'FieldValue' },
+    fieldValue: { type: Schema.Types.ObjectId, ref: 'FieldValue' },
     product: { type: Schema.Types.ObjectId, ref: 'Product' },
     mandatory: Boolean,
     name: String,
