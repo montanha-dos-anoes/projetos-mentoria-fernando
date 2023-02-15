@@ -27,7 +27,7 @@ export class App {
 
   private async connectToDatabase() {
     mongoose.set("strictQuery", false);
-    return mongoose.connect(config.DB_URI,).then(() => {
+    return mongoose.connect(config.DB_URI).then(() => {
       console.log('[app] > database conected');
     });
   }
