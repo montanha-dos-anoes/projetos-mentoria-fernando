@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import fieldValueController from '../controller/fieldValue.controller';
 import indexController from '../controller/index.controller';
 import productController from '../controller/product.controller';
 import productTypeController from '../controller/productType.controller';
@@ -29,5 +30,13 @@ router.get('/fields/:id', fieldController.getById);
 router.post('/fields', fieldController.create);
 router.put('/fields/:id', fieldController.update);
 router.delete('/fields/:id', fieldController.delete);
+
+
+
+router.get('/field-value', fieldValueController.get);
+router.get('/field-value/:id', fieldValueController.getById);
+router.post('/field-value', fieldValueController.create);
+router.put('/field-value/:id', fieldValueController.update);
+router.delete('/field-value/:id', fieldValueController.delete);
 
 export { router };
