@@ -5,8 +5,8 @@ const ObjectId = require('mongodb').ObjectId;
 
 class ProductController {
   public async create(req: Request, res: Response) {
-    const { code, name, productType, description, quantity, priceInput, priceOutput, imageProduct  } = req.body; 
-    const created = await productService.create({ code, name, productType, description, quantity, priceInput, priceOutput, imageProduct });
+    const { code, name, productType, description, quantity, priceInput, priceOutput, imageProduct, fieldValue, field, value  } = req.body; 
+    const created = await productService.create({ code, name, productType, description, quantity, priceInput, priceOutput, imageProduct, fieldValue, field, value });
     return res.status(201).send(created);
   }
 

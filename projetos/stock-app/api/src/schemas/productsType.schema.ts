@@ -1,10 +1,16 @@
 import { model, Schema } from 'mongoose';
+import { EnumFieldType } from './enumField';
 
 
 const schemaField = new Schema(
   {
-    type: String,
-    isRequired: Boolean,
+    type: {
+      type: String,
+      enum: EnumFieldType
+    },
+    mandatory: Boolean,
+    name: String,
+    orderRegister: Number,
   },
   {
     timestamps: true,

@@ -3,6 +3,12 @@ import { productsTypeRepository }  from '../repositories/productType.repository'
 export interface CreateProductTypeDto {
   description: String;
   fields: String;
+  type: String,
+  product: String,
+  mandatory: Boolean,
+  name: String,
+  orderRegister: Number,
+  isRequired: Boolean,
 }
 
 class ProductTypeService {
