@@ -8,8 +8,8 @@ const schemaField = new Schema(
       type: String,
       enum: EnumFieldType
     },
-    mandatory: Boolean,
-    name: String,
+    isRequired: Boolean,
+    name: { type: String, required: true },
     orderRegister: Number,
   },
   {
@@ -20,7 +20,7 @@ const schemaField = new Schema(
 
 const schemaProductType = new Schema(
   {
-    description: String,   
+    description: String,
     fields: [schemaField],
     isActive: {
       type: Boolean,

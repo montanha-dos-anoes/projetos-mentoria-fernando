@@ -1,20 +1,9 @@
 import { model, Schema } from "mongoose";
-import schemaProductType from './productsType.schema';
-
-const schemaFieldValue = new Schema(
-  {
-    name: String,
-    value: String
-  },
-  {
-    timestamps: true,
-  },
-);
 
 const schemaProduct = new Schema(
     {
       code: String, 
-      fieldValue: [schemaFieldValue],
+      fieldValues: {  },
       productType: { type: Schema.Types.ObjectId, ref: 'ProductType' },
       name: String,
       description: String,
@@ -32,13 +21,4 @@ const schemaProduct = new Schema(
     },
   );
 
-
-  schemaProduct
-  .virtual('productTypeData', {
-    ref: 'ProductType',
-    localField: 'productType',
-    foreignField: '_id',
-    justOne: true,
-  });
-  
   export default model('Product', schemaProduct, 'products');

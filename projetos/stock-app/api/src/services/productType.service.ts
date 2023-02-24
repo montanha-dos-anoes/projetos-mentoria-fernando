@@ -23,17 +23,17 @@ class ProductTypeService {
     return listTypeProduct;
   }
 
-  async getById(id: Number){
+  async getById(id: string){
     const getProductById = await productsTypeRepository.getByIdTypeProduct(id);
     return getProductById;
   }
 
-  async update(id: Number, dto: CreateProductTypeDto){
+  async update(id: string, dto: CreateProductTypeDto){
     const updateTypeProduct = await productsTypeRepository.updateTypeProduct(id, dto);
     return updateTypeProduct;
   }
 
-  async delete(id: Number){
+  async delete(id: string){
     const deleteTypeProduct = await productsTypeRepository.deleteTypeProduct(id);
     return deleteTypeProduct;
   }

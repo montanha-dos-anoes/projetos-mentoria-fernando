@@ -12,18 +12,18 @@ class ProductTypeRepository {
     return listTypeProduct;
   }
 
-  async getByIdTypeProduct(id: Number){
+  async getByIdTypeProduct(id: string){
     const getByIdTypeProduct = await productsTypeSchema.findById(id);
     return getByIdTypeProduct;
   }
 
-  async updateTypeProduct(id: Number, productsType: CreateProductTypeDto){
+  async updateTypeProduct(id: string, productsType: CreateProductTypeDto){
     const updateTypeProduct = await productsTypeSchema.findByIdAndUpdate(id, productsType);
     return updateTypeProduct;
   }
 
-  async deleteTypeProduct(id: Number){
-    const deleteTypeProduct = await productsTypeSchema.deleteOne(id);
+  async deleteTypeProduct(id: string){
+    const deleteTypeProduct = await productsTypeSchema.deleteOne({ _id: id });
     return deleteTypeProduct;
   }
 
