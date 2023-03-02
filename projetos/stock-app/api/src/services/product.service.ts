@@ -31,70 +31,58 @@ class ProductService {
 
       const productType = await productsTypeRepository.getByIdTypeProduct(dto.productType);
       if (!productType) {
-        // retornar o erro para o user
         return 'Tipo de produto não existe';
       }
 
       const fieldValues = dto.fieldValues;
       const formatFieldValue = Object.keys(fieldValues);
 
-      // for(const campos of formatFieldValue.toString() ){
-      //   console.log(campos);
-        
-      //   // console.log(formatFieldValue);
+      // let armazenaField = {};
+      // for (const field of productType.fields){
+      //   armazenaField = field.name;
+      //   console.log(armazenaField);
+
       // }
-      let armazenaField = {};
-      for (const field of productType.fields){
-        // console.log(field.name)
-        armazenaField = field.name;
-        console.log(armazenaField);
-
-      }
     
-      let armazenaFieldValues = {}
-      formatFieldValue.forEach( itens => {
-        // console.log(itens)
-        armazenaFieldValues = itens;
-        console.log(armazenaFieldValues);
-      })
+      // let armazenaFieldValues = {}
+      // formatFieldValue.forEach( itens => {
+      //   armazenaFieldValues = itens;
+      //   console.log(armazenaFieldValues);
+      // })
 
-      if(armazenaField != armazenaFieldValues){
-        console.log('tem alguma coisa diferente');
-        return 'Verifque se o nome dos campos está de acordo com o valor dos campos, ou se tem mais campos que valor dos campos'
-      }
+      // if(armazenaField != armazenaFieldValues){
+      //   console.log('tem alguma coisa diferente');
+      //   return 'Verifque se o nome dos campos está de acordo com o valor dos campos, ou se tem mais campos que valor dos campos'
+      // }
 
-      // console.log(product?.productType);
-      // console.log(productType?.fields);
+      // const typeKeys = productType.fields.map(field => [field.name, field]) as any
+      // const uniqueListNameType = new Map(typeKeys) as any
+
+      // console.log('typeKeys');
+      // console.log(typeKeys);
+      // console.log('\n');
+      // console.log("uniqueListNameType")
+      // console.log(uniqueListNameType);
+
+      // for(const keyFieldDto of formatFieldValue){
+      //   const fieldFound = uniqueListNameType.set[keyFieldDto];
+      //   console.log(fieldFound)
+      //   if(!fieldFound){
+      //     console.log(fieldFound)
+      //     console.log('field' + keyFieldDto + ' não existe no tipo' + uniqueListNameType)
+      //     return `deu ruim ${keyFieldDto} não existe em ${uniqueListNameType}`;
+      //   }
+      // }
+
+      
+
+
 
       for (const field of productType.fields) {
 
         const fieldValues = dto.fieldValues;
         const fieldValue = dto.fieldValues[field.name];
-        const formatFieldValue = Object.keys(fieldValues);
-
-        // console.log(field.name)
-        // console.log(fieldValue)
-
-
-
-        // console.log(fieldValue);
-
-        // for( const field of formatFieldValue){
-        //   console.log(field);
-        //   console.log(formatFieldValue);
-        // }
-
-        // if(field.name != formatFieldValue.toString()[1]){
-        //   console.log(field.name);
-        //   console.log(formatFieldValue);
-        //   return 'Existe algum campo que não bate com o molde'
-        // }
-
-        // console.log(Object.keys(fieldValues));
-        // console.log(fieldValue);
-        // console.log(field.name);
         if (field.isRequired && fieldValue == undefined) {
-          // estoura um errao   
           return 'field é obrigatorio'
         }
 

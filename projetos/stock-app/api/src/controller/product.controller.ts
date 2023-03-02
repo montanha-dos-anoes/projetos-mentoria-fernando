@@ -7,17 +7,27 @@ class ProductController {
   public async create(req: Request, res: Response) {
     const { code, name, productType, description, quantity, priceInput, priceOutput, imageProduct, fieldValues  } = req.body; 
     const created = await productService.create({ code, name, productType, description, quantity, priceInput, priceOutput, imageProduct, fieldValues });
-    return res.status(201).send(created);
+    return res.status(201).json({
+      data: created,
+      message: "Product created sucefful!",
+      sucess: true
+    })
   }
 
   public async get(req: Request, res: Response) {
     const data = await productService.get()
     if (!data) {
       return res.status(404).json({
-        message: 'Products not found'
+        data: data,
+        message: 'Products not found',
+        sucess: false
       });
     }
-    return res.status(200).json(data);
+    return res.status(200).json({
+      data: data,
+      message: "Listing of products!",
+      sucess: true
+    });
   }
 
   public async getById(req: Request, res: Response) {
@@ -26,15 +36,22 @@ class ProductController {
       const data = await productService.getById(id);
       if (!data) {
         return res.status(404).json({
-          message: `Product with id ${req.params.id} not found`
+          data: data,
+          message: `Product with id ${req.params.id} not found`,
+          sucess: false
         });
       }
-      return res.status(200).json(data);
+      return res.status(200).json({
+        data: data,
+        message: "Search by ID successful!",
+        sucess: true
+      });
     }
     catch (error) {
       return res.status(500).json({
         message: 'Error retrieving product',
-        error: error
+        error: error,
+        sucess: false
       });
     }
   }
@@ -44,11 +61,15 @@ class ProductController {
     const data = await productService.update(id, req.body)
     if (!data) {
       return res.status(404).json({
-        message: `Check the id and fields`
+        data: data,
+        message: "Check the id and fields",
+        sucess: false
       });
     }
     return res.status(200).json({
-      message: `fields changed successfully ${data}`
+      data: data,
+      message: "Fields updated successfull",
+      sucess: true
     });
   }
 
@@ -57,11 +78,15 @@ class ProductController {
     const data = await productService.delete(id);
     if (!data) {
       return res.status(404).json({
-        message: `Product with id ${req.params.id} not found`
+        data: data,
+        message: `Product with id ${req.params.id} not found`,
+        sucess: false
       });
     }
     return res.status(200).json({
-      message: `deleted product successfully`
+      data: data,
+      message: "Successfully deleted product!",
+      sucess: true
     })
   } 
 

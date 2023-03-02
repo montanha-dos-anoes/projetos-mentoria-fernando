@@ -5,7 +5,6 @@ export interface CreateProductTypeDto {
   fields: String;
   type: String,
   product: String,
-  mandatory: Boolean,
   name: String,
   orderRegister: Number,
   isRequired: Boolean,
