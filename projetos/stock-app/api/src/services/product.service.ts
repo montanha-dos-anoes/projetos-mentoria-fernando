@@ -25,10 +25,8 @@ interface FieldValue {
   [key: string]: string;
 }
 class ProductService {
-
   async create(dto: CreateProductDto) {
     try {
-
       const productType = await productsTypeRepository.getByIdTypeProduct(dto.productType);
       if (!productType) {
         return 'Tipo de produto não existe';
@@ -37,49 +35,20 @@ class ProductService {
       const fieldValues = dto.fieldValues;
       const formatFieldValue = Object.keys(fieldValues);
 
-      // let armazenaField = {};
-      // for (const field of productType.fields){
-      //   armazenaField = field.name;
-      //   console.log(armazenaField);
+      let dicionario = {} as any
+      for (const field of productType.fields){
+        dicionario[field.name] = field;
+      }
 
-      // }
-    
-      // let armazenaFieldValues = {}
-      // formatFieldValue.forEach( itens => {
-      //   armazenaFieldValues = itens;
-      //   console.log(armazenaFieldValues);
-      // })
-
-      // if(armazenaField != armazenaFieldValues){
-      //   console.log('tem alguma coisa diferente');
-      //   return 'Verifque se o nome dos campos está de acordo com o valor dos campos, ou se tem mais campos que valor dos campos'
-      // }
-
-      // const typeKeys = productType.fields.map(field => [field.name, field]) as any
-      // const uniqueListNameType = new Map(typeKeys) as any
-
-      // console.log('typeKeys');
-      // console.log(typeKeys);
-      // console.log('\n');
-      // console.log("uniqueListNameType")
-      // console.log(uniqueListNameType);
-
-      // for(const keyFieldDto of formatFieldValue){
-      //   const fieldFound = uniqueListNameType.set[keyFieldDto];
-      //   console.log(fieldFound)
-      //   if(!fieldFound){
-      //     console.log(fieldFound)
-      //     console.log('field' + keyFieldDto + ' não existe no tipo' + uniqueListNameType)
-      //     return `deu ruim ${keyFieldDto} não existe em ${uniqueListNameType}`;
-      //   }
-      // }
-
-      
-
-
+      for (const keyDTO of formatFieldValue){
+        const fieldFound = dicionario[keyDTO];
+        if(!fieldFound){
+          console.log(`field ${keyDTO} não existe no tipo` )
+          return `O field "   ${keyDTO}   "  não existe no fieldType`
+        }
+      }
 
       for (const field of productType.fields) {
-
         const fieldValues = dto.fieldValues;
         const fieldValue = dto.fieldValues[field.name];
         if (field.isRequired && fieldValue == undefined) {
@@ -100,7 +69,7 @@ class ProductService {
           const regexValidIsNumber = /^[0-9]+$/;
           const hasValidNumeric = regexValidIsNumber.test(fieldValue);
           if (!hasValidNumeric) {
-            return 'o field precisa ser um número';
+            return { code: 500, message: 'The field must be a number!' };
           }
         }
 
