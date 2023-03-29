@@ -26,69 +26,63 @@ interface FieldValue {
 }
 class ProductService {
   async create(dto: CreateProductDto) {
-    try {
-      const productType = await productsTypeRepository.getByIdTypeProduct(dto.productType);
-      if (!productType) {
-        return 'Tipo de produto não existe';
-      }
 
-      const fieldValues = dto.fieldValues;
-      const formatFieldValue = Object.keys(fieldValues);
-
-      let dicionario = {} as any
-      for (const field of productType.fields){
-        dicionario[field.name] = field;
-      }
-
-      for (const keyDTO of formatFieldValue){
-        const fieldFound = dicionario[keyDTO];
-        if(!fieldFound){
-          console.log(`field ${keyDTO} não existe no tipo` )
-          return `O field "   ${keyDTO}   "  não existe no fieldType`
-        }
-      }
-
-      for (const field of productType.fields) {
-        const fieldValues = dto.fieldValues;
-        const fieldValue = dto.fieldValues[field.name];
-        if (field.isRequired && fieldValue == undefined) {
-          return 'field é obrigatorio'
-        }
-
-        if (fieldValue == undefined) return;
-
-        if (field.type == 'text') {
-          const regexValidIsString = /^(?![0-9])(?!.*\b(?:true|false)\b)[\w\sáéíóúàèìòùâêîôûãõç!@#$%^&*()-+=\\\[\]{}|;:'",.<>/?`~]+$/i;
-          const hasValidString = regexValidIsString.test(fieldValue);
-          if (!hasValidString) {
-            return 'o field precisa ser uma string valida';
-          }
-        }
-
-        if (field.type == 'numeric') {
-          const regexValidIsNumber = /^[0-9]+$/;
-          const hasValidNumeric = regexValidIsNumber.test(fieldValue);
-          if (!hasValidNumeric) {
-            return { code: 500, message: 'The field must be a number!' };
-          }
-        }
-
-        if (field.type == 'boolean') {
-          const regexValidIsBoolean = /^(true|false)$/;
-          const hasValidBoolean = regexValidIsBoolean.test(fieldValue);
-          if (!hasValidBoolean) {
-            return ' o field precisa ser um booleano';
-          }
-        }
-      }
-
-      const created = await productRepository.createProduct(dto);
-      return created;
-
-    } catch (error) {
-      console.log(error)
-      return error;
+    const productType = await productsTypeRepository.getByIdTypeProduct(dto.productType);
+    if (!productType) {
+      throw new Error('Product type does not exist');
     }
+
+    const fieldValues = dto.fieldValues;
+    const formatFieldValue = Object.keys(fieldValues);
+
+    let dicionario = {} as any
+    for (const field of productType.fields) {
+      dicionario[field.name] = field;
+    }
+
+    for (const keyDTO of formatFieldValue) {
+      const fieldFound = dicionario[keyDTO];
+      if (!fieldFound) {
+        throw new Error(`Field " ${keyDTO} " does not exist in fieldType`)
+      }
+    }
+
+    for (const field of productType.fields) {
+      const fieldValues = dto.fieldValues;
+      const fieldValue = dto.fieldValues[field.name];
+      if (field.isRequired && fieldValue == undefined) {
+        throw new Error('field is obrigatory')
+      }
+
+      if (fieldValue == undefined) return;
+
+      if (field.type == 'text') {
+        const regexValidIsString = /^(?![0-9])(?!.*\b(?:true|false)\b)[\w\sáéíóúàèìòùâêîôûãõç!@#$%^&*()-+=\\\[\]{}|;:'",.<>/?`~]+$/i;
+        const hasValidString = regexValidIsString.test(fieldValue);
+        if (!hasValidString) {
+          throw new Error('field must be a valid string');
+        }
+      }
+
+      if (field.type == 'numeric') {
+        const regexValidIsNumber = /^[0-9]+$/;
+        const hasValidNumeric = regexValidIsNumber.test(fieldValue);
+        if (!hasValidNumeric) {
+          throw new Error('The field must be a number!');
+        }
+      }
+
+      if (field.type == 'boolean') {
+        const regexValidIsBoolean = /^(true|false)$/;
+        const hasValidBoolean = regexValidIsBoolean.test(fieldValue);
+        if (!hasValidBoolean) {
+          throw new Error('The field needs to be a booleano');
+        }
+      }
+    }
+
+    const created = await productRepository.createProduct(dto);
+    return created;
   }
 
   async get() {
@@ -102,6 +96,59 @@ class ProductService {
   }
 
   async update(id: string, dto: CreateProductDto) {
+    const productType = await productsTypeRepository.getByIdTypeProduct(dto.productType);
+    if (!productType) {
+      throw new Error('Product type does not exist');
+    }
+
+    const fieldValues = dto.fieldValues;
+    const formatFieldValue = Object.keys(fieldValues);
+
+    let dicionario = {} as any
+    for (const field of productType.fields) {
+      dicionario[field.name] = field;
+    }
+
+    for (const keyDTO of formatFieldValue) {
+      const fieldFound = dicionario[keyDTO];
+      if (!fieldFound) {
+        throw new Error(`Field " ${keyDTO} " does not exist in fieldType`)
+      }
+    }
+
+    for (const field of productType.fields) {
+      const fieldValues = dto.fieldValues;
+      const fieldValue = dto.fieldValues[field.name];
+      if (field.isRequired && fieldValue == undefined) {
+        throw new Error('field is obrigatory')
+      }
+
+      if (fieldValue == undefined) return;
+
+      if (field.type == 'text') {
+        const regexValidIsString = /^(?![0-9])(?!.*\b(?:true|false)\b)[\w\sáéíóúàèìòùâêîôûãõç!@#$%^&*()-+=\\\[\]{}|;:'",.<>/?`~]+$/i;
+        const hasValidString = regexValidIsString.test(fieldValue);
+        if (!hasValidString) {
+          throw new Error('field must be a valid string');
+        }
+      }
+
+      if (field.type == 'numeric') {
+        const regexValidIsNumber = /^[0-9]+$/;
+        const hasValidNumeric = regexValidIsNumber.test(fieldValue);
+        if (!hasValidNumeric) {
+          throw new Error('The field must be a number!');
+        }
+      }
+
+      if (field.type == 'boolean') {
+        const regexValidIsBoolean = /^(true|false)$/;
+        const hasValidBoolean = regexValidIsBoolean.test(fieldValue);
+        if (!hasValidBoolean) {
+          throw new Error('The field needs to be a boolean');
+        }
+      }
+    }
     const updateProduct = await productRepository.updateProduct(id, dto);
     return updateProduct
   }

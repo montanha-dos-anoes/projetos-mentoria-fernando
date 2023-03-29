@@ -7,12 +7,21 @@ const ObjectId = require('mongodb').ObjectId;
 
 class ProductTypeController {
   public async create(req: Request, res: Response) {
-    const created = await productTypeService.create(req.body);
-    return res.status(201).json({
-      data: created,
-      message: "Product type created sucefull!",
-      sucess: true
-    });
+    try {
+      const created = await productTypeService.create(req.body);
+      return res.status(201).json({
+        data: created,
+        message: "Product type created sucefull!",
+        sucess: true
+      });
+    } catch (error) {
+      return res.status(404).json({
+        data: null,
+        message: (error as Error).message,
+        sucess: false,
+      });
+    }
+
   }
 
   public async get(req: Request, res: Response) {
@@ -59,19 +68,20 @@ class ProductTypeController {
 
   public async update(req: Request, res: Response) {
     const id = ObjectId(req.params.id);
-    const data = await productTypeService.update(id, req.body)
-    if (!data) {
-      return res.status(404).json({
+    try {
+      const data = await productTypeService.update(id, req.body)
+      return res.status(200).json({
         data: data,
-        message: "Check the id and fields",
+        message: "Fields updated successfully!",
+        sucess: true
+      });
+    } catch (error) {
+      return res.status(404).json({
+        data: null,
+        message: (error as Error).message,
         sucess: false
       });
     }
-    return res.status(200).json({
-      data: data,
-      message: "Fields updated successfully!",
-      sucess: true
-    });
   }
 
   public async delete(req: Request, res: Response) {
