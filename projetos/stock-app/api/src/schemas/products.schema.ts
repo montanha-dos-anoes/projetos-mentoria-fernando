@@ -1,10 +1,9 @@
 import { model, Schema } from "mongoose";
-import schemaProductType from './productsType.schema';
-
 
 const schemaProduct = new Schema(
     {
       code: String, 
+      fieldValues: {  },
       productType: { type: Schema.Types.ObjectId, ref: 'ProductType' },
       name: String,
       description: String,
@@ -21,4 +20,5 @@ const schemaProduct = new Schema(
       timestamps: true,
     },
   );
+
   export default model('Product', schemaProduct, 'products');

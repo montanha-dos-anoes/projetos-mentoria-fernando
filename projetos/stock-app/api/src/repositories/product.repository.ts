@@ -2,27 +2,27 @@ import productsSchema from '../schemas/products.schema';
 import { CreateProductDto } from '../services/product.service';
 class ProductRepository {
   async createProduct(product: CreateProductDto) {
-    const created = await productsSchema.create(product);    
+    const created = await (await productsSchema.create(product)).populate('productType');
     return created.toObject();
   }
 
-    async getAllProducts(){
-    const listTypeProduct = await productsSchema.find();
+  async getAllProducts() {
+    const listTypeProduct = await productsSchema.find().populate('productType');
     return listTypeProduct;
   }
 
-  async getByIdProduct(id: Number){
-    const getByIdProduct = await productsSchema.findById(id);
+  async getByIdProduct(id: string) {
+    const getByIdProduct = await productsSchema.findById(id).populate('productType');
     return getByIdProduct;
   }
 
-  async updateProduct(id: Number, product: CreateProductDto){
+  async updateProduct(id: string, product: CreateProductDto) {
     const updateProduct = await productsSchema.findByIdAndUpdate(id, product);
     return updateProduct;
   }
 
-  async deleteProduct(id: Number){
-    const deleteProduct = await productsSchema.deleteOne(id);
+  async deleteProduct(id: string) {
+    const deleteProduct = await productsSchema.deleteOne({ _id: id });
     return deleteProduct;
   }
 

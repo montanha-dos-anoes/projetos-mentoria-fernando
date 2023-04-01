@@ -7,18 +7,37 @@ const ObjectId = require('mongodb').ObjectId;
 
 class ProductTypeController {
   public async create(req: Request, res: Response) {
-    const created = await productTypeService.create(req.body);
-    return res.status(201).send(created);
+    try {
+      const created = await productTypeService.create(req.body);
+      return res.status(201).json({
+        data: created,
+        message: "Product type created sucefull!",
+        sucess: true
+      });
+    } catch (error) {
+      return res.status(404).json({
+        data: null,
+        message: (error as Error).message,
+        sucess: false,
+      });
+    }
+
   }
 
   public async get(req: Request, res: Response) {
     const data = await productTypeService.get()
     if (!data) {
       return res.status(404).json({
-        message: `Products not found`
+        data: data,
+        message: `Products not found`,
+        sucess: false
       });
     }
-    return res.status(200).json(data);
+    return res.status(200).json({
+      data: data,
+      message: "Listing of products type!",
+      sucess: true
+    });
   }
 
   public async getById(req: Request, res: Response) {
@@ -27,10 +46,16 @@ class ProductTypeController {
       const data = await productTypeService.getById(id);
       if (!data) {
         return res.status(404).json({
-          message: `Product type with id ${req.params.id} not found`
+          data: data,
+          message: `Product type with id ${req.params.id} not found`,
+          sucess: false
         });
       }
-      return res.status(200).json(data);
+      return res.status(200).json({
+        data: data,
+        message: "Search by ID successful!",
+        sucess: true
+      });
     }
     catch (error) {
       return res.status(500).json({
@@ -43,15 +68,20 @@ class ProductTypeController {
 
   public async update(req: Request, res: Response) {
     const id = ObjectId(req.params.id);
-    const data = await productTypeService.update(id, req.body)
-    if (!data) {
+    try {
+      const data = await productTypeService.update(id, req.body)
+      return res.status(200).json({
+        data: data,
+        message: "Fields updated successfully!",
+        sucess: true
+      });
+    } catch (error) {
       return res.status(404).json({
-        message: `Check the id and fields`
+        data: null,
+        message: (error as Error).message,
+        sucess: false
       });
     }
-    return res.status(200).json({
-      message: `fields changed successfully ${data}`
-    });
   }
 
   public async delete(req: Request, res: Response) {
@@ -59,11 +89,15 @@ class ProductTypeController {
     const data = await productTypeService.delete(id);
     if (!data) {
       return res.status(404).json({
-        message: `Product type with id ${req.params.id} not found`
+        data: data,
+        message: `Product with id ${req.params.id} not found`,
+        sucess: false
       });
     }
     return res.status(200).json({
-      message: `deleted field successfully`
+      data: data,
+      message: "Successfully deleted product!",
+      sucess: true
     })
   }
 }
