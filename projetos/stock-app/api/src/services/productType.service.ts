@@ -1,3 +1,5 @@
+import { FileWatcherEventKind } from 'typescript';
+import productRepository from '../repositories/product.repository';
 import { productsTypeRepository } from '../repositories/productType.repository';
 
 
@@ -31,9 +33,9 @@ class ProductTypeService {
 
     for (const field of dto.fields) {
       const exists = saveFields.has(field.name)
-      if(!exists){
+      if (!exists) {
         saveFields.add(field.name)
-      }else{
+      } else {
         throw new Error(`The field ${field.name} is duplicated!`);
       }
     }
@@ -53,27 +55,57 @@ class ProductTypeService {
   }
 
   async update(id: string, dto: CreateProductTypeDto) {
-    const updateTypeProduct = await productsTypeRepository.updateTypeProduct(id, dto);
+
 
     if (!dto.fields || dto.fields.length == 0) {
       throw new Error('It is necessary to put at least one field!');
     }
-    
+
     const saveFields = new Set();
 
     for (const field of dto.fields) {
       const exists = saveFields.has(field.name)
-      if(!exists){
+      if (!exists) {
         saveFields.add(field.name)
-      }else{
+      } else {
         throw new Error(`The field ${field.name} is duplicated!`);
       }
     }
 
+    // descobrir se tem produto vinculado
+    const productsByType = await productRepository.findByProductType(id);
+
+    if (productsByType.length > 0) {
+
+      const productType = await productsTypeRepository.getByIdTypeProduct(id);
+
+      const dtoRequiredFields = dto.fields.filter(field => field.isRequired);
+      const originalRequiredFields = productType?.fields.filter(field => field.isRequired) || [];
+
+      for (const field of originalRequiredFields) {
+       const fieldExists = dtoRequiredFields.find(fieldDto => fieldDto.name == field.name)
+        if(!fieldExists){
+          throw new Error(`It is not possible to remove a required field in this product type with linked products!`);
+        }
+      }
+
+      for (const field of dtoRequiredFields) {
+        const fieldExists = originalRequiredFields.find(fieldDto => fieldDto.name == field.name)
+         if(!fieldExists){
+           throw new Error(`It is not possible to add a new required field if you have linked products!`);
+         }
+       }
+    }
+
+    const updateTypeProduct = await productsTypeRepository.updateTypeProduct(id, dto);
     return updateTypeProduct;
   }
 
   async delete(id: string) {
+    const products = await productRepository.findByProductType(id);
+    if (products.length > 0) {
+      throw new Error(`Has products with this product type!`);
+    }
     const deleteTypeProduct = await productsTypeRepository.deleteTypeProduct(id);
     return deleteTypeProduct;
   }

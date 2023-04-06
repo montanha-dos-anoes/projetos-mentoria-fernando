@@ -27,8 +27,10 @@ class ProductTypeRepository {
     return deleteTypeProduct;
   }
 
-
-  
+  async getTypeProductByName(name: string){
+    const productsTypes = await productsTypeSchema.find({ name: name});
+    return productsTypes;
+  }
 }
 
 export const productsTypeRepository =  new ProductTypeRepository();
