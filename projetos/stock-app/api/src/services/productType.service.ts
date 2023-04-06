@@ -1,3 +1,4 @@
+import productRepository from '../repositories/product.repository';
 import { productsTypeRepository } from '../repositories/productType.repository';
 
 
@@ -31,9 +32,9 @@ class ProductTypeService {
 
     for (const field of dto.fields) {
       const exists = saveFields.has(field.name)
-      if(!exists){
+      if (!exists) {
         saveFields.add(field.name)
-      }else{
+      } else {
         throw new Error(`The field ${field.name} is duplicated!`);
       }
     }
@@ -58,14 +59,14 @@ class ProductTypeService {
     if (!dto.fields || dto.fields.length == 0) {
       throw new Error('It is necessary to put at least one field!');
     }
-    
+
     const saveFields = new Set();
 
     for (const field of dto.fields) {
       const exists = saveFields.has(field.name)
-      if(!exists){
+      if (!exists) {
         saveFields.add(field.name)
-      }else{
+      } else {
         throw new Error(`The field ${field.name} is duplicated!`);
       }
     }
@@ -74,6 +75,10 @@ class ProductTypeService {
   }
 
   async delete(id: string) {
+    const products = await productRepository.findByProductType(id);
+    if (products.length > 0) {
+      throw new Error(`Has products with this product type!`);
+    }
     const deleteTypeProduct = await productsTypeRepository.deleteTypeProduct(id);
     return deleteTypeProduct;
   }

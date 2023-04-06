@@ -26,6 +26,11 @@ class ProductRepository {
     return deleteProduct;
   }
 
+  async findByProductType( productsTypeId: string ){
+    const productTypeFound = await productsSchema.find({ productType: productsTypeId })
+    return productTypeFound
+  }
+
 }
 
 export default new ProductRepository();

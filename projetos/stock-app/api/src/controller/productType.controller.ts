@@ -86,19 +86,20 @@ class ProductTypeController {
 
   public async delete(req: Request, res: Response) {
     const id = ObjectId(req.params.id);
-    const data = await productTypeService.delete(id);
-    if (!data) {
-      return res.status(404).json({
+    try {
+      const data = await productTypeService.delete(id);
+      return res.status(200).json({
         data: data,
-        message: `Product with id ${req.params.id} not found`,
+        message: "Successfully deleted product!",
+        sucess: true
+      })
+    } catch (error) {
+      return res.status(400).json({
+        data: null,
+        message: (error as Error).message,
         sucess: false
       });
     }
-    return res.status(200).json({
-      data: data,
-      message: "Successfully deleted product!",
-      sucess: true
-    })
   }
 }
 export default new ProductTypeController();
