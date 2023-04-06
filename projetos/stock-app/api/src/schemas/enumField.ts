@@ -3,7 +3,6 @@ enum EnumFieldType  {
     numeric = "numeric",
     date = "date",
     boolean = "boolean",
-    default = "text"
 };
 
 export { EnumFieldType };
