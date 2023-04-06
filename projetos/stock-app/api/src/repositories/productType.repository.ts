@@ -31,7 +31,6 @@ class ProductTypeRepository {
     const productsTypes = await productsTypeSchema.find({ name: name});
     return productsTypes;
   }
-  
 }
 
 export const productsTypeRepository =  new ProductTypeRepository();

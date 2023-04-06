@@ -1,3 +1,4 @@
+import { FileWatcherEventKind } from 'typescript';
 import productRepository from '../repositories/product.repository';
 import { productsTypeRepository } from '../repositories/productType.repository';
 
@@ -54,7 +55,7 @@ class ProductTypeService {
   }
 
   async update(id: string, dto: CreateProductTypeDto) {
-    const updateTypeProduct = await productsTypeRepository.updateTypeProduct(id, dto);
+
 
     if (!dto.fields || dto.fields.length == 0) {
       throw new Error('It is necessary to put at least one field!');
@@ -71,6 +72,32 @@ class ProductTypeService {
       }
     }
 
+    // descobrir se tem produto vinculado
+    const productsByType = await productRepository.findByProductType(id);
+
+    if (productsByType.length > 0) {
+
+      const productType = await productsTypeRepository.getByIdTypeProduct(id);
+
+      const dtoRequiredFields = dto.fields.filter(field => field.isRequired);
+      const originalRequiredFields = productType?.fields.filter(field => field.isRequired) || [];
+
+      for (const field of originalRequiredFields) {
+       const fieldExists = dtoRequiredFields.find(fieldDto => fieldDto.name == field.name)
+        if(!fieldExists){
+          throw new Error(`It is not possible to remove a required field in this product type with linked products!`);
+        }
+      }
+
+      for (const field of dtoRequiredFields) {
+        const fieldExists = originalRequiredFields.find(fieldDto => fieldDto.name == field.name)
+         if(!fieldExists){
+           throw new Error(`It is not possible to add a new required field if you have linked products!`);
+         }
+       }
+    }
+
+    const updateTypeProduct = await productsTypeRepository.updateTypeProduct(id, dto);
     return updateTypeProduct;
   }
 
