@@ -20,6 +20,7 @@ const schemaField = new Schema(
 
 const schemaProductType = new Schema(
   {
+    code: Number,
     description: String,
     fields: [schemaField],
     isActive: {

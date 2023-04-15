@@ -10,7 +10,7 @@ type Field = {
 }
 
 export interface CreateProductDto {
-  code: String;
+  code: number;
   productType: string;
   name: String;
   description: String;
@@ -32,6 +32,34 @@ class ProductService {
       throw new Error('Product type does not exist');
     }
 
+    const searchLastProduct = await productRepository.getLastProduct();
+    let codeValueLastProduct = searchLastProduct?.code
+
+    let codeTypeProduct = productType.code;
+    let codeProduct = dto.code as number;
+    console.log(codeTypeProduct?.toString())
+
+    if (codeValueLastProduct == undefined) {
+      codeValueLastProduct = 1
+      // let convertCodeInString = codeTypeProduct?.toString() + codeValueLastProduct.toString();
+      // console.log(convertCodeInString)
+      // dto.code = parseInt(convertCodeInString)
+      dto.code = codeValueLastProduct;
+
+    } else {
+      codeValueLastProduct = codeValueLastProduct + 1
+      // let convertCodeInString = codeTypeProduct?.toString() + codeValueLastProduct.toString();
+      // console.log(convertCodeInString)
+      // dto.code = parseInt(convertCodeInString);
+      dto.code = codeValueLastProduct;
+    }
+
+    if (dto.code > 9999) {
+      throw new Error('IMany types of product listings');
+    }
+
+
+    console.log(dto.code)
     const fieldValues = dto.fieldValues;
     const formatFieldValue = Object.keys(fieldValues);
 
