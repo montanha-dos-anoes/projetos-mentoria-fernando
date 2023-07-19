@@ -10,7 +10,7 @@ type Field = {
 }
 
 export interface CreateProductDto {
-  code: number;
+  code: String;
   productType: string;
   name: String;
   description: String;
@@ -32,34 +32,25 @@ class ProductService {
       throw new Error('Product type does not exist');
     }
 
-    const searchLastProduct = await productRepository.getLastProduct();
-    let codeValueLastProduct = searchLastProduct?.code
+    const searchLastProduct = await productRepository.getLastProduct(dto.productType);
 
+    let codeValueLastProduct = searchLastProduct?.code;
+    console.log('codeValueLastProduct' + codeValueLastProduct);
     let codeTypeProduct = productType.code;
-    let codeProduct = dto.code as number;
+
     console.log(codeTypeProduct?.toString())
 
-    if (codeValueLastProduct == undefined) {
-      codeValueLastProduct = 1
-      // let convertCodeInString = codeTypeProduct?.toString() + codeValueLastProduct.toString();
-      // console.log(convertCodeInString)
-      // dto.code = parseInt(convertCodeInString)
-      dto.code = codeValueLastProduct;
-
-    } else {
-      codeValueLastProduct = codeValueLastProduct + 1
-      // let convertCodeInString = codeTypeProduct?.toString() + codeValueLastProduct.toString();
-      // console.log(convertCodeInString)
-      // dto.code = parseInt(convertCodeInString);
-      dto.code = codeValueLastProduct;
+    if(codeValueLastProduct == undefined){
+      codeValueLastProduct =  '1';
+      const part1 = codeTypeProduct?.toString().padStart(2, '0');
+      const part2 = codeValueLastProduct?.toString().padStart(4, '0');
+      dto.code = `${part1}${part2}`;
+    }else{
+      const newNumber = parseInt(codeValueLastProduct) + 1;
+      const newCodeProduct = newNumber.toString().padStart(6, '0');
+      dto.code = newCodeProduct;
     }
-
-    if (dto.code > 9999) {
-      throw new Error('IMany types of product listings');
-    }
-
-
-    console.log(dto.code)
+    
     const fieldValues = dto.fieldValues;
     const formatFieldValue = Object.keys(fieldValues);
 
