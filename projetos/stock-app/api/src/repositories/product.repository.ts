@@ -31,6 +31,11 @@ class ProductRepository {
     return productTypeFound
   }
 
+  async getLastProduct(productsTypeId: string ){
+    const lastProduct = await productsSchema.findOne({productType: productsTypeId}).sort({field: 'asc', _id: -1})
+    return lastProduct;
+  }
+
 }
 
 export default new ProductRepository();
