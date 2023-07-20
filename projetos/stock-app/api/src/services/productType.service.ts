@@ -8,6 +8,7 @@ interface Field {
   isRequired: boolean;
   name: string;
   orderRegister: number;
+  dateLimit: Date,
 }
 
 export interface CreateProductTypeDto {
@@ -19,6 +20,7 @@ export interface CreateProductTypeDto {
   name: String,
   orderRegister: Number,
   isRequired: Boolean,
+  dateLimit: Date,
 }
 
 class ProductTypeService {

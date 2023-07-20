@@ -40,17 +40,18 @@ class ProductService {
 
     console.log(codeTypeProduct?.toString())
 
-    if(codeValueLastProduct == undefined){
-      codeValueLastProduct =  '1';
+
+    if (codeValueLastProduct == undefined) {
+      codeValueLastProduct = '1';
       const part1 = codeTypeProduct?.toString().padStart(2, '0');
       const part2 = codeValueLastProduct?.toString().padStart(4, '0');
       dto.code = `${part1}${part2}`;
-    }else{
+    } else {
       const newNumber = parseInt(codeValueLastProduct) + 1;
       const newCodeProduct = newNumber.toString().padStart(6, '0');
       dto.code = newCodeProduct;
     }
-    
+
     const fieldValues = dto.fieldValues;
     const formatFieldValue = Object.keys(fieldValues);
 
@@ -73,8 +74,32 @@ class ProductService {
         throw new Error('field is obrigatory')
       }
 
+      console.log(field.dateLimit);
+
+      if (field.dateLimit) {
+        if (field.type == 'date') {
+          // const regexValidData = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+          const regexValidData = /^\d{4}-\d{2}-\d{2}$/;
+          const hasValidDate = regexValidData.test(fieldValue);
+          if (!hasValidDate) {
+            throw new Error('field must be a valid date');
+          }
+          if (field.dateLimit.getTime() < new Date(fieldValue).getTime()) {
+            throw new Error('date is greater than a limit');
+          }
+        }
+      }
+
       if (fieldValue == undefined) return;
 
+
+      if (field.type == 'date') {
+        const regexValidData = /^\d{4}-\d{2}-\d{2}$/;
+        const hasValidDate = regexValidData.test(fieldValue);
+        if (!hasValidDate) {
+          throw new Error('field must be a valid date');
+        }
+      }
       if (field.type == 'text') {
         const regexValidIsString = /^(?![0-9])(?!.*\b(?:true|false)\b)[\w\sáéíóúàèìòùâêîôûãõç!@#$%^&*()-+=\\\[\]{}|;:'",.<>/?`~]+$/i;
         const hasValidString = regexValidIsString.test(fieldValue);
