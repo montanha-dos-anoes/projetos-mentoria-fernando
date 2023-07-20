@@ -8,7 +8,8 @@ const ObjectId = require('mongodb').ObjectId;
 class ProductTypeController {
   public async create(req: Request, res: Response) {
     try {
-      const { description, fields, type, isRequired, name, orderRegister, dateLimit } = req.body
+      const { description, fields, type, isRequired, name, orderRegister, dateLimit } = req.body;
+
       const created = await productTypeService.create(req.body);
       return res.status(201).json({
         data: created,

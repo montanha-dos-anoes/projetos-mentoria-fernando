@@ -40,6 +40,7 @@ class ProductService {
 
     console.log(codeTypeProduct?.toString())
 
+
     if (codeValueLastProduct == undefined) {
       codeValueLastProduct = '1';
       const part1 = codeTypeProduct?.toString().padStart(2, '0');
