@@ -73,6 +73,22 @@ class ProductService {
         throw new Error('field is obrigatory')
       }
 
+      console.log(field.dateLimit);
+
+      if(field.dateLimit){
+        if(field.type == 'date'){
+          // const regexValidData = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
+          const regexValidData = /^\d{4}-\d{2}-\d{2}$/;
+          const hasValidDate = regexValidData.test(fieldValue);
+          if(!hasValidDate){
+            throw new Error('field must be a valid date');
+          }
+          if(field.dateLimit.getTime() <  new Date(fieldValue).getTime()){
+            throw new Error('date is greater than a limit');
+          }
+        }
+      }
+
       if (fieldValue == undefined) return;
 
       if (field.type == 'text') {
@@ -94,7 +110,7 @@ class ProductService {
       if (field.type == 'boolean') {
         const regexValidIsBoolean = /^(true|false)$/;
         const hasValidBoolean = regexValidIsBoolean.test(fieldValue);
-        if (!hasValidBoolean) {
+        if (!hasValidBoolean) { 
           throw new Error('The field needs to be a booleano');
         }
       }

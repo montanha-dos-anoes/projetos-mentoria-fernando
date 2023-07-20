@@ -11,6 +11,7 @@ const schemaField = new Schema(
     isRequired: Boolean,
     name: { type: String, required: true },
     orderRegister: Number,
+    dateLimit: Date,
   },
   {
     timestamps: true,
