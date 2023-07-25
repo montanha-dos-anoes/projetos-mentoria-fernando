@@ -71,27 +71,8 @@ class ProductService {
       const fieldValues = dto.fieldValues;
       const fieldValue = dto.fieldValues[field.name];
       if (field.isRequired && fieldValue == undefined) {
-        throw new Error('field is obrigatory')
+        throw new Error(`field " ${field.name} " is obrigatory`)
       }
-
-      console.log(field.dateLimit);
-
-      if (field.dateLimit) {
-        if (field.type == 'date') {
-          // const regexValidData = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
-          const regexValidData = /^\d{4}-\d{2}-\d{2}$/;
-          const hasValidDate = regexValidData.test(fieldValue);
-          if (!hasValidDate) {
-            throw new Error('field must be a valid date');
-          }
-          if (field.dateLimit.getTime() < new Date(fieldValue).getTime()) {
-            throw new Error('date is greater than a limit');
-          }
-        }
-      }
-
-      if (fieldValue == undefined) return;
-
 
       if (field.type == 'date') {
         const regexValidData = /^\d{4}-\d{2}-\d{2}$/;
@@ -99,7 +80,14 @@ class ProductService {
         if (!hasValidDate) {
           throw new Error('field must be a valid date');
         }
+
+        if (field.dateLimit) {
+          if (field.dateLimit.getTime() < new Date(fieldValue).getTime()) {
+            throw new Error('date is greater than a limit');
+          }
+        }
       }
+
       if (field.type == 'text') {
         const regexValidIsString = /^(?![0-9])(?!.*\b(?:true|false)\b)[\w\sáéíóúàèìòùâêîôûãõç!@#$%^&*()-+=\\\[\]{}|;:'",.<>/?`~]+$/i;
         const hasValidString = regexValidIsString.test(fieldValue);
@@ -123,15 +111,6 @@ class ProductService {
           throw new Error('The field needs to be a booleano');
         }
       }
-
-      if (field.type == 'date') {
-        const regexValidIsDate = /^([0-2][0-9]|3[0-1])\/(0[0-9]|1[0-2])\/[0-9]{4}$/;
-        const hasValidIsDate = regexValidIsDate.test(fieldValue);
-        if (!hasValidIsDate) {
-          throw new Error('The field needs to be a date');
-        }
-      }
-
     }
 
     const created = await productRepository.createProduct(dto);
@@ -176,7 +155,19 @@ class ProductService {
         throw new Error('field is obrigatory')
       }
 
-      if (fieldValue == undefined) return;
+      if (field.type == 'date') {
+        const regexValidData = /^\d{4}-\d{2}-\d{2}$/;
+        const hasValidDate = regexValidData.test(fieldValue);
+        if (!hasValidDate) {
+          throw new Error('field must be a valid date');
+        }
+
+        if (field.dateLimit) {
+          if (field.dateLimit.getTime() < new Date(fieldValue).getTime()) {
+            throw new Error('date is greater than a limit');
+          }
+        }
+      }
 
       if (field.type == 'text') {
         const regexValidIsString = /^(?![0-9])(?!.*\b(?:true|false)\b)[\w\sáéíóúàèìòùâêîôûãõç!@#$%^&*()-+=\\\[\]{}|;:'",.<>/?`~]+$/i;
@@ -199,14 +190,6 @@ class ProductService {
         const hasValidBoolean = regexValidIsBoolean.test(fieldValue);
         if (!hasValidBoolean) {
           throw new Error('The field needs to be a boolean');
-        }
-      }
-
-      if (field.type == 'date') {
-        const regexValidIsDate = /^([0-2][0-9]|3[0-1])\/(0[0-9]|1[0-2])\/[0-9]{4}$/;
-        const hasValidIsDate = regexValidIsDate.test(fieldValue);
-        if (!hasValidIsDate) {
-          throw new Error('The field needs to be a date');
         }
       }
       
