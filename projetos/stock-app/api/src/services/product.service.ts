@@ -76,7 +76,6 @@ class ProductService {
 
       if (field.dateLimit) {
         if (field.type == 'date') {
-          // const regexValidData = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
           const regexValidData = /^\d{4}-\d{2}-\d{2}$/;
           const hasValidDate = regexValidData.test(fieldValue);
           if (!hasValidDate) {
@@ -165,7 +164,6 @@ class ProductService {
 
       if (field.dateLimit) {
         if (field.type == 'date') {
-          // const regexValidData = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/;
           const regexValidData = /^\d{4}-\d{2}-\d{2}$/;
           const hasValidDate = regexValidData.test(fieldValue);
           if (!hasValidDate) {
